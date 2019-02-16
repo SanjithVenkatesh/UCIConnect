@@ -1,0 +1,46 @@
+html,body{
+  /* background:#999; */
+  font-family: arial;
+  height: 120%;
+  width: 100%;
+  font-family: 'Poppins', sens-serif;
+  margin:0 auto;
+ }
+
+ .navbar-brand {
+     position: relative;
+     background: url(../images/uci-logo2.png);
+     left: 10px;
+     width: auto;
+ }
+ .carousel-inner img {
+     margin: 0 auto;
+     width: 100%;
+     height: 100%;
+ }
+
+ .carousel-caption{
+   position: absolute;
+   top: 70%;
+ }
+
+ .nav-item{
+   /* width:auto; */
+   font-size:27px;
+ }
+
+ .navbar-nav{
+   width: 45%;
+
+ }
+
+ .img-responsive{
+   width: 100%;
+   height: auto;
+ }
+
+
+#brand-image{
+  height: 80px;
+  width: 250px;
+}
