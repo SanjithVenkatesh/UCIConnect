@@ -16,7 +16,7 @@ app.use( express.static( "img" ) );
 // app.get('/', (req, res) => res.send('Hello World!'));
 
 app.get("/", function(req,res,next){
-    connection.query("select * from events order by -startTime desc limit 10;",
+    connection.query("select * from events order by -startTime desc limit 9;",
     function(error, results, fields){
         let upcomingEvents = JSON.parse(JSON.stringify(results));
         console.log(upcomingEvents);
@@ -93,6 +93,10 @@ app.post("/register", function(req,res,next){
 
         });
     });
-})
+});
+
+app.get("/clubs", function(req, res, next){
+    res.render("clubs.html");
+});
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'));

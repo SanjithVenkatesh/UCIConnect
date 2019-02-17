@@ -8,6 +8,9 @@ insert into attendee(event_id, name, email) values
 (4,"Toto Ferrari", "maranello@oorr.com");
 show databases;
 
+delete from events where startTime = NULL;
+
+SET SQL_SAFE_UPDATES = 0;
 
 select * from attendee;
 select * from events;

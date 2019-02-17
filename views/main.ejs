@@ -26,7 +26,7 @@
 
               <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                  <a class="nav-link active" href="main.ejs">Home</a>
+                  <a class="nav-link active" href="/">Home</a>
                 </li>
 
                 <li class="nav-item">
@@ -34,7 +34,7 @@
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link" href="clubs.html">Clubs</a>
+                  <a class="nav-link" href="/clubs">Clubs</a>
                 </li>
 
                 <li class="nav-item">
@@ -201,7 +201,7 @@ window.onclick = function(event) {
     <div><img src="img/3.jpg"></div>
     <div><img src="img/3.jpg"></div> -->
     <% upcomingEvents.forEach((event)=>{ %>
-        <p style = "padding: 25px;" a href = "">Name:  <%=event.event_name%> </br> Organizer: <%=event.organizer%> </br>Description: <%=event.event_description%><br>Starting at: <%=event.startTime%> <br>  Ending at: <%=event.endTime%><br>Contact: <%=event.contact%> </p>
+        <p style = "padding: 25px;" a href = "">Name:  <%=event.event_name%> </br> Organizer: <%=event.organizer%> </br>Description: <%=event.event_description%><br>Starting at: <%=event.startTime%> <br>Contact: <%=event.contact%> </p>
 
     <%}); %>
   </div>
