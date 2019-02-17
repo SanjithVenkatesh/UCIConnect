@@ -14,18 +14,19 @@ app.use(bodyParser.json());
 
 // app.get('/', (req, res) => res.send('Hello World!'));
 
-app.get("/", function(req,res,next){
-    connection.query("select * from events order by -startTime desc limit 5;",
-    function(error, results, fields){
-        let upcomingEvents = JSON.parse(JSON.stringify(results));
-        console.log(upcomingEvents);
-        if(error) throw error;
-        //replace this line with res.render with whatever ejs file you have created
-        res.json(results);
-    });
+app.get("/", function(req, res, next) {
+    connection.query("select * from events order by -startTime desc limit 12;",
+        function(error, results, fields) {
+            let upcomingEvents = JSON.parse(JSON.stringify(results));
+            console.log(upcomingEvents);
+            if (error) throw error;
+            //replace this line with res.render with whatever ejs file you have created
+            res.render("main.ejs", { "upcomingEvents": upcomingEvents });
+            //res.json(results);
+        });
 });
 
-app.post("/createEvent", function(req,res,next){
+app.post("/createEvent", function(req, res, next) {
     let eventName = req.body.eventName.toString();
     let eventLocation = req.body.eventLocation.toString();
     let eventDescription = req.body.eventDescription.toString();
@@ -33,24 +34,25 @@ app.post("/createEvent", function(req,res,next){
     let eventContact = req.body.eventContact.toString();
     let eventStartTime = req.body.eventStartTime.toString();
     let eventEndTime = req.body.eventEndTime.toString();
-    let insertionQuery = "insert into events(event_name, event_description, organizer, location, contact, startTime, endTime) values (\'" + eventName + "\', \'" + eventDescription + "\',\'" + eventOrganizer + "\', \'"  + eventLocation + "\', \'" + eventContact + "\', \'" + eventStartTime + "\', \'" + eventEndTime + "\');";
+    let eventDate = req.body.eventDate.toString();
+    let insertionQuery = "insert into events(event_name, event_description, organizer, location, contact, startTime, endTime, eventDate) values (\'" + eventName + "\', \'" + eventDescription + "\',\'" + eventOrganizer + "\', \'" + eventLocation + "\', \'" + eventContact + "\', \'" + eventStartTime + "\', \'" + eventEndTime + "\', \'" + eventDate + "\');";
     console.log(insertionQuery);
-    connection.query(insertionQuery, function(error, results,fields){
-        if(error) throw error;
+    connection.query(insertionQuery, function(error, results, fields) {
+        if (error) throw error;
         res.redirect("/");
     });
 });
 
-app.post("/register", function(req,res,next){
+app.post("/register", function(req, res, next) {
     let attendeeName = req.body.name.toString();
     let attendeeEmail = req.body.email.toString();
     let eventID = req.body.event;
     let insertionQuery = "insert into attendee(event_id, name, email) values (\'" + eventID + "\', \'" + attendeeName + "\', \'" + attendeeEmail + "\');";
     let getEventContact = "select contact as orgEmail, event_name as eventName, organizer as org, location as loc from events where id = " + eventID + ";";
-    connection.query(insertionQuery, function(error, results, fields){
-        if(error) throw error;
-        connection.query(getEventContact, function(err,result,param){
-            if(err) throw err;
+    connection.query(insertionQuery, function(error, results, fields) {
+        if (error) throw error;
+        connection.query(getEventContact, function(err, result, param) {
+            if (err) throw err;
             let organizerEmail = result[0].orgEmail;
             let eName = result[0].eventName.toString();
             let oName = result[0].org.toString();
@@ -70,10 +72,9 @@ app.post("/register", function(req,res,next){
             //     html: '<p>Hello, you have a new attendee!</p>',
             // };
             console.log("before send");
-            try{
-                sgMail.send(toAttendeeEmail);               
-            }
-            catch(error){
+            try {
+                sgMail.send(toAttendeeEmail);
+            } catch (error) {
                 console.log(error);
             }
             // sgMail.send(toOrganizerEmail);
