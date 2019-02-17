@@ -1,0 +1,92 @@
+require('dotenv').config()
+
+const express = require('express');
+const app = express();
+const connection = require('./database');
+const datetime = require("node-datetime");
+const bodyParser = require('body-parser');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(bodyParser.json());
+
+// app.get('/', (req, res) => res.send('Hello World!'));
+
+app.get("/", function(req,res,next){
+    connection.query("select * from events;",
+    function(error, results, fields){
+        if(error) throw error;
+        res.json(results);
+    });
+});
+
+app.post("/createEvent", function(req,res,next){
+    let eventName = req.body.eventName.toString();
+    let eventLocation = req.body.eventLocation.toString();
+    let eventDescription = req.body.eventDescription.toString();
+    let eventOrganizer = req.body.eventOrganizer.toString();
+    let eventContact = req.body.eventContact.toString();
+    let eventStartTime = req.body.eventStartTime.toString();
+    let eventEndTime = req.body.eventEndTime.toString();
+    let insertionQuery = "insert into events(event_name, event_description, organizer, location, contact, startTime, endTime) values (\'" + eventName + "\', \'" + eventDescription + "\',\'" + eventOrganizer + "\', \'"  + eventLocation + "\', \'" + eventContact + "\', \'" + eventStartTime + "\', \'" + eventEndTime + "\');";
+    console.log(insertionQuery);
+    connection.query(insertionQuery, function(error, results,fields){
+        if(error) throw error;
+        res.redirect("/");
+    });
+});
+
+app.post("/register", function(req,res,next){
+    let attendeeName = req.body.name.toString();
+    let attendeeEmail = req.body.email.toString();
+    let eventID = req.body.event;
+    let insertionQuery = "insert into attendee(event_id, name, email) values (\'" + eventID + "\', \'" + attendeeName + "\', \'" + attendeeEmail + "\');";
+    let getEventContact = "select contact as orgEmail, event_name as eventName, organizer as org, location as loc from events where id = " + eventID + ";";
+    connection.query(insertionQuery, function(error, results, fields){
+        if(error) throw error;
+        connection.query(getEventContact, function(err,result,param){
+            if(err) throw err;
+            let organizerEmail = result[0].orgEmail;
+            let eName = result[0].eventName.toString();
+            let oName = result[0].org.toString();
+            let locName = result[0].loc.toString();
+            const toAttendeeEmail = {
+                to: 'sanjithv@uci.edu',
+                from: 'sanjith.venkatesh@gmail.com',
+                subject: 'Event Confirmation',
+                text: "You have signed up for " + eName + " being organized by " + oName + ". The event will take place at " + locName + ". You can contact the organizers at " + organizerEmail + ". See you there!",
+                html: '',
+            };
+            // const toOrganizerEmail = {
+            //     to: organizerEmail.toString(),
+            //     from: 'sanjith.venkatesh@gmail.com',
+            //     subject: 'New Signup!',
+            //     text: attendeeName.toString() + " has signed up for your event! You can contact " + attendeeName + " at " + attendeeEmail,
+            //     html: '<p>Hello, you have a new attendee!</p>',
+            // };
+            console.log("before send");
+            try{
+                sgMail.send(toAttendeeEmail);               
+            }
+            catch(error){
+                console.log(error);
+            }
+            // sgMail.send(toOrganizerEmail);
+            // const msg = {
+            //     to: 'test@example.com',
+            //     from: 'test@example.com',
+            //     subject: 'Sending with SendGrid is Fun',
+            //     text: 'and easy to do anywhere, even with Node.js',
+            //     html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+            //   };
+            //   sgMail.send(msg);
+            console.log("sent email");
+            res.redirect("/");
+
+        });
+    });
+})
+
+app.listen(3000, () => console.log('Example app listening on port 3000!'));
