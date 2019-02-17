@@ -122,7 +122,9 @@
 
 
 <!-- Trigger/Open The Modal -->
-<button id="myBtn">Open Modal</button>
+<div class = "wrapper" style = "text-align: center;">
+  <button id="myBtn" style = "position: absolute;">New Event</button><br><br>
+</div>
 
 <!-- The Modal -->
 <div id="myModal" class="modal">
@@ -131,28 +133,26 @@
   <div class="modal-content">
     <div class="modal-header">
       <span class="close">&times;</span>
-      <h2>Modal Header</h2>
+      <h2>Create new event!</h2>
     </div>
     <div class="modal-body">
       <p>Create a New Event</p>
-      <form>
-			<p>Event Name:</p>
-			<input type="text" name="eventName" value="Example"<br>
-			<p>Host:</p>
-			<input type="text" name="eventHost" <br>
-			<p>Location:</p>
-			<input type="text" name="eventLocation" <br>
-			<p>Date:</p>
-			<input type="date" name="eventDate"> <br>
-			<p>Time:</p>
-			<input type="time" name="eventTime"> <br>
-			<p>Email:</p>
-			<input type="text" name="hostContact" <br>
-			<p>Event Description: </p>
-			<textarea name="eventDescription" rows="10" cols="40"></textarea> <br>
-			<p>Upload Photo:
-			<input type="button" value="Submit" onclick="grabData(this.form)"/>
-			</p>
+      <form action = "/createEvent" method="POST">
+        <input type = "submit" value = "Submit">
+        <p>Event Name:</p>
+        <input type="text" name="eventName" value="Example"><br>
+        <p>Host:</p>
+        <input type="text" name="eventHost"> <br>
+        <p>Location:</p>
+        <input type="text" name="eventLocation"> <br>
+        <p>Date:</p>
+        <input type="date" name="eventDate"> <br>
+        <p>Time:</p>
+        <input type="time" name="eventTime"> <br>
+        <p>Email:</p>
+        <input type="text" name="hostContact"> <br>
+        <p>Event Description: </p>
+        <textarea name="eventDescription" rows="10" cols="40"></textarea> <br>
 		</form>
     </div>
     <div class="modal-footer">
