@@ -12,6 +12,8 @@ show databases;
 select * from attendee;
 select * from events;
 
+select * from events order by -startTime desc limit 12;
+
 insert into events(event_name, event_description, organizer, location, contact, startTime, endTime) values ('Bowling Night', 'Bowl with friends!','Bowling at UCI', 'Irvine Lanes', 'sanjithv@uci.edu', '2019-02-14 20:00:00', '2019-02-14 22:22:22');
 
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';

@@ -15,9 +15,12 @@ app.use(bodyParser.json());
 // app.get('/', (req, res) => res.send('Hello World!'));
 
 app.get("/", function(req,res,next){
-    connection.query("select * from events;",
+    connection.query("select * from events order by -startTime desc limit 5;",
     function(error, results, fields){
+        let upcomingEvents = JSON.parse(JSON.stringify(results));
+        console.log(upcomingEvents);
         if(error) throw error;
+        //replace this line with res.render with whatever ejs file you have created
         res.json(results);
     });
 });
