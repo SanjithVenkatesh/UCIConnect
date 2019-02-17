@@ -11,6 +11,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
+app.use( express.static( "img" ) );
 
 // app.get('/', (req, res) => res.send('Hello World!'));
 
@@ -21,7 +22,7 @@ app.get("/", function(req,res,next){
         console.log(upcomingEvents);
         if(error) throw error;
         //replace this line with res.render with whatever ejs file you have created
-        res.json(results);
+        res.render("main.ejs", {"upcomingEvents" : upcomingEvents});
     });
 });
 
